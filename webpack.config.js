@@ -1,6 +1,6 @@
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const webpack = require('webpak');
+const webpack = require('webpack');
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development'; // environment variable that store the environment that we current are. Heroku sets it as 'production'
 
