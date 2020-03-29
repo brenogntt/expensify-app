@@ -1,4 +1,3 @@
-import uuid from 'uuid';
 import database from '../firebase/firebase';
 
 // ADD_EXPENSE
@@ -8,11 +7,11 @@ export const addExpense = (expense) => ({
 });
 
 export const startAddExpense = ({ description = '', note = '', amount = 0, createdAt = 0 } = {}) => { // this is going to return what will be dispatched now. (a function)
-  return (dispatch) => { // this is possible because I added that middleware
-    
+  return (dispatch, getState) => { // this is possible because I added that middleware. Async functions are called by dispatch or getState
+    const uid = getState().auth.uid;
     const expense = { description, note, amount, createdAt };
 
-    return database.ref('expenses').push(expense).then((ref) => { // ref parameter means whatever the sucess resolve of database sends back. THis 'return' is used to set up properly my test case
+    return database.ref(`users/${uid}/expenses`).push(expense).then((ref) => { // ref parameter means whatever the sucess resolve of database sends back. THis 'return' is used to set up properly my test case
       dispatch(addExpense({
         id: ref.key,// I have to pass the id to addExpense, and firebase is generating it now
         ...expense
@@ -28,8 +27,9 @@ export const removeExpense = ({ id } = {}) => ({
 });
 
 export const startRemoveExpense = ({ id } = {}) => {
-  return (dispatch) => {
-    return database.ref(`expenses/${id}`).remove().then(()=>{
+  return (dispatch, getState) => {
+    const uid = getState().auth.uid;
+    return database.ref(`users/${uid}/expenses/${id}`).remove().then(()=>{
       dispatch(removeExpense({ id }));
     })
   };
@@ -43,8 +43,9 @@ export const editExpense = (id, updates) => ({
 });
 
 export const startEditExpense = (id, updates) => {
-  return (dispatch) => {
-    return database.ref(`expenses/${id}`).update({ // return da promise do database - retorno pra quem chamou 
+  return (dispatch, getState) => {
+    const uid = getState().auth.uid;
+    return database.ref(`users/${uid}/expenses/${id}`).update({ // return da promise do database - retorno pra quem chamou 
       ...updates
     }).then(() => {
       dispatch(editExpense(id, updates));
@@ -60,8 +61,9 @@ export const setExpenses = (expenses) => ({
 });
 
 export const startSetExpenses = () => {
-  return (dispatch) => {
-    return database.ref('expenses').once('value').then((snapshot) => { // this return makes the promise return its value
+  return (dispatch, getState) => {
+    const uid = getState().auth.uid;
+    return database.ref(`users/${uid}/expenses`).once('value').then((snapshot) => { // this return makes the promise return its value
       const expenses = [];
 
       snapshot.forEach((childSnapshot) => {
