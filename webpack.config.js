@@ -15,16 +15,16 @@ module.exports = (env) => {
   const CSSExtract = new ExtractTextPlugin('styles.css');
 
   return {
-    entry: './src/app.js',
-  output: {
-    path: path.join(__dirname, 'public', 'dist'),
-    filename: 'bundle.js'
-  },
-  module: {
-    rules: [{
-      loader: 'babel-loader',
-      test: /\.js$/,
-      exclude: /node_modules/
+    entry: ['babel-polyfill', './src/app.js'],
+    output: {
+      path: path.join(__dirname, 'public', 'dist'),
+      filename: 'bundle.js'
+    },
+    module: {
+      rules: [{
+        loader: 'babel-loader',
+        test: /\.js$/,
+        exclude: /node_modules/
     }, {
       test: /\.s?css$/,
       use: CSSExtract.extract({
@@ -32,13 +32,13 @@ module.exports = (env) => {
           {
             loader: 'css-loader',
             options: {
-              sourceMap: true // setting souceMap to dev environment
+              sourceMap: true 
             }
           },
           {
             loader: 'sass-loader',
             options: {
-              sourceMap: true // setting souceMap to dev environment
+              sourceMap: true 
             }
           }
         ]
@@ -47,7 +47,7 @@ module.exports = (env) => {
   },
   plugins: [
     CSSExtract,
-    new webpack.DefinePlugin({ // built in web pack plugin 
+    new webpack.DefinePlugin({
       'process.env.FIREBASE_API_KEY': JSON.stringify(process.env.FIREBASE_API_KEY),
       'process.env.FIREBASE_AUTH_DOMAIN': JSON.stringify(process.env.FIREBASE_AUTH_DOMAIN),
       'process.env.FIREBASE_DATABASE_URL': JSON.stringify(process.env.FIREBASE_DATABASE_URL),

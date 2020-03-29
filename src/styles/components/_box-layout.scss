@@ -1,9 +1,10 @@
 .box-layout {
     align-items: center;
-    background: url("/public/images/bg.jpg");
+    background-image: url('/public/images/favicon.png');
+    //background: green;
     background-size: cover;
     display: flex;
-    height: 10vh;
+    height: 100vh;
     justify-content: center;
     width: 100vw;
 }

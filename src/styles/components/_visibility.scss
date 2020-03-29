@@ -1,0 +1,11 @@
+.show-for-mobile {
+    @media(min-width: $desktop-breakpoint){ // se eu atingir a largura mínima de desktop (disso pra cima), não mostro mais
+        display: none;
+    }
+}
+
+.show-for-desktop {
+    @media (max-width: $desktop-breakpoint - .01rem) { // subtraiu um valor minimo só para ter certeza que nao vão ativar/desativar ao mesmo tempo
+        display: none;
+    }
+}
